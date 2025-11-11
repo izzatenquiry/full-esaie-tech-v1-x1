@@ -164,11 +164,11 @@ const AssigningTokenModal: React.FC<AssigningTokenModalProps> = ({ status, error
 };
 
 const SERVERS = [
-    'https://s1.monoklix.com',
-    'https://s2.monoklix.com',
-    'https://s3.monoklix.com',
-    'https://s4.monoklix.com',
-    'https://s5.monoklix.com'
+    'https://s1.esaie.tech',
+    'https://s2.esaie.tech',
+    'https://s3.esaie.tech',
+    'https://s4.esaie.tech',
+    'https://s5.esaie.tech'
 ];
 
 const ServerSelectionModal: React.FC<{ onSelect: (serverUrl: string) => void, currentUser: User, language: Language }> = ({ onSelect, currentUser, language }) => {
@@ -307,7 +307,7 @@ const App: React.FC = () => {
     }
     await signOutUser();
     localStorage.removeItem('currentUser');
-    sessionStorage.removeItem('monoklix_session_api_key'); // Clean up session key
+    sessionStorage.removeItem('esaie_tech_session_api_key'); // Clean up session key
     sessionStorage.removeItem('session_started_at'); // Clean up session start time
     sessionStorage.removeItem('selectedProxyServer'); // Clean up proxy selection
     setCurrentUser(null);
@@ -420,7 +420,7 @@ const App: React.FC = () => {
       if (!currentUser?.id) {
         // Clear all session-specific data on logout
         setActiveApiKey(null);
-        sessionStorage.removeItem('monoklix_session_api_key');
+        sessionStorage.removeItem('esaie_tech_session_api_key');
         sessionStorage.removeItem('veoAuthTokens');
         sessionStorage.removeItem('veoAuthToken');
         sessionStorage.removeItem('veoAuthTokenCreatedAt');
@@ -438,7 +438,7 @@ const App: React.FC = () => {
 
         // Handle Master API Key
         if (masterKey) {
-          sessionStorage.setItem('monoklix_session_api_key', masterKey);
+          sessionStorage.setItem('esaie_tech_session_api_key', masterKey);
           setActiveApiKey(masterKey);
           console.log(`Shared master API key (...${masterKey.slice(-4)}) loaded and set in session storage.`);
         } else {

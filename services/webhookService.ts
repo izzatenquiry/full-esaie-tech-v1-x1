@@ -165,7 +165,7 @@ export const sendTestUserWebhook = async (): Promise<{ success: boolean; message
 
     const testPayload = {
         type: 'test',
-        message: 'This is a test webhook from MONOklix.com',
+        message: 'This is a test webhook from ESAIE.TECH',
         timestamp: Date.now(),
         userId: user.id,
     };

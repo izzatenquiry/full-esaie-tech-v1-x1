@@ -185,7 +185,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, onLogout, 
         
         <div className="mt-auto pt-4 border-t border-neutral-200 dark:border-neutral-800">
           {renderSection('bottom')}
-          <p className="mt-4 text-center text-neutral-500 dark:text-neutral-600 text-xs">© 2025 MONOklix.com ({APP_VERSION})</p>
+          <p className="mt-4 text-center text-neutral-500 dark:text-neutral-600 text-xs">© 2025 ESAIE.TECH ({APP_VERSION})</p>
         </div>
       </nav>
     </>

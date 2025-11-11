@@ -261,7 +261,7 @@ export const initializeAdminAccount = async () => {
 
     const profileData: Database['public']['Tables']['users']['Insert'] = {
         id: adminUserId,
-        full_name: 'MONOklix Admin',
+        full_name: 'ESAIE.TECH Admin',
         email: adminEmail,
         phone: '+601111303527', // Default phone
         role: 'admin',

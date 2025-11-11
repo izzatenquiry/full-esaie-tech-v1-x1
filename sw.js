@@ -1,4 +1,4 @@
-const CACHE_NAME = 'monoklix-cache-v2'; // Bump version to force update
+const CACHE_NAME = 'esaie-tech-cache-v1'; // Bump version to force update
 const URLS_TO_CACHE = [
   '/',
   '/index.html',

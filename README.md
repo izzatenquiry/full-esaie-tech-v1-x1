@@ -1,6 +1,6 @@
-# MONOklix.com - All-in-One AI Platform
+# ESAIE.TECH - All-in-One AI Platform
 
-MONOklix.com is a comprehensive, web-based AI platform designed to streamline content creation for marketers, content creators, and entrepreneurs. Powered by Google's Gemini API, the platform provides an integrated suite of tools for generating and editing text, images, videos, and audio content.
+ESAIE.TECH is a comprehensive, web-based AI platform designed to streamline content creation for marketers, content creators, and entrepreneurs. Powered by Google's Gemini API, the platform provides an integrated suite of tools for generating and editing text, images, videos, and audio content.
 
 ---
 
@@ -19,7 +19,7 @@ The application features a simplified, streamlined user flow:
 The application is structured into intuitive suites, each targeting a specific content creation need:
 
 #### 📝 **AI Content Idea Suite**
-- **Staff MONOklix:** A team of specialized AI agents (e.g., market researcher, copywriter, scriptwriter) that users can select to perform specific marketing and content tasks.
+- **Staff ESAIE.TECH:** A team of specialized AI agents (e.g., market researcher, copywriter, scriptwriter) that users can select to perform specific marketing and content tasks.
 - **Content Ideas:** Generate trendy and engaging ideas for any topic using Google Search grounding for up-to-date results.
 - **Marketing Copy:** Craft persuasive copy for social media, ads, and websites with customizable tones and languages.
 - **Storyline Generator:** Automatically create a compelling 1-scene video ad concept from a product image and description.

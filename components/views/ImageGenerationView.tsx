@@ -60,7 +60,8 @@ interface ImageGenerationViewProps {
 
 const SESSION_KEY = 'imageGenerationState';
 
-const ImageGenerationView: React.FC<ImageGenerationViewProps> = ({ onCreateVideo, onReEdit, imageToReEdit, clearReEdit, presetPrompt, clearPresetPrompt, currentUser, onUserUpdate, language }) => {
+// FIX: Change to named export to resolve module resolution issues.
+export const ImageGenerationView: React.FC<ImageGenerationViewProps> = ({ onCreateVideo, onReEdit, imageToReEdit, clearReEdit, presetPrompt, clearPresetPrompt, currentUser, onUserUpdate, language }) => {
   const [prompt, setPrompt] = useState('');
   const [images, setImages] = useState<ImageSlot[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -384,13 +385,23 @@ const ImageGenerationView: React.FC<ImageGenerationViewProps> = ({ onCreateVideo
     <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
       <button onClick={() => handleLocalReEdit(imageBase64, mimeType)} title="Sunting Semula" className="flex items-center justify-center w-8 h-8 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors"><WandIcon className="w-4 h-4" /></button>
       <button onClick={() => onCreateVideo({ prompt, image: { base64: imageBase64, mimeType } })} title="Cipta Video" className="flex items-center justify-center w-8 h-8 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors"><VideoIcon className="w-4 h-4" /></button>
-      <button onClick={() => downloadImage(imageBase64, `monoklix-image-${Date.now()}.png`)} title="Muat Turun" className="flex items-center justify-center w-8 h-8 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors"><DownloadIcon className="w-4 h-4" /></button>
+      <button onClick={() => downloadImage(imageBase64, `esaie-tech-image-${Date.now()}.png`)} title="Muat Turun" className="flex items-center justify-center w-8 h-8 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors"><DownloadIcon className="w-4 h-4" /></button>
     </div>
   );
 
   const rightPanel = (
     <>
-      {images.length > 0 ? (
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center h-full gap-2">
+            <Spinner />
+            <p className="text-neutral-500 dark:text-neutral-400">{statusMessage || `Menjana... (${progress}/${numberOfImages})`}</p>
+        </div>
+      ) : images.length === 0 ? (
+        <div className="text-center text-neutral-500 dark:text-neutral-600">
+            <StarIcon className="w-16 h-16 mx-auto"/>
+            <p>Imej yang anda jana akan muncul di sini.</p>
+        </div>
+      ) : (
         <div className="w-full h-full flex flex-col items-center justify-center gap-2 p-2">
             <div className="flex-1 flex items-center justify-center min-h-0 w-full relative group">
                 {(() => {
@@ -404,39 +415,29 @@ const ImageGenerationView: React.FC<ImageGenerationViewProps> = ({ onCreateVideo
                         );
                     } else if (selectedImage && typeof selectedImage === 'object') {
                         return (
-                            <div className="text-center text-red-500 dark:text-red-400 p-4">
-                                <AlertTriangleIcon className="w-12 h-12 mx-auto mb-4" />
-                                <p className="font-semibold">Penjanaan Gagal</p>
-                                <p className="text-sm mt-2 max-w-md mx-auto">{selectedImage.error}</p>
-                                <button
-                                    onClick={() => handleRetry(selectedImageIndex)}
-                                    className="mt-6 flex items-center justify-center gap-2 bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors"
-                                >
-                                    <RefreshCwIcon className="w-4 h-4" />
-                                    Cuba Lagi
-                                </button>
-                            </div>
+                             <div className="text-center text-red-500 dark:text-red-400 p-4">
+                               <AlertTriangleIcon className="w-12 h-12 mx-auto mb-4" />
+                               <p className="font-semibold">Penjanaan Gagal</p>
+                               <p className="text-sm mt-2 max-w-md mx-auto">{selectedImage.error}</p>
+                               <button
+                                   onClick={() => handleRetry(selectedImageIndex)}
+                                   className="mt-6 flex items-center justify-center gap-2 bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary-700 mx-auto"
+                               >
+                                   <RefreshCwIcon className="w-4 h-4" />
+                                   Cuba Lagi
+                               </button>
+                             </div>
                         );
                     }
-                    return (
-                        <div className="flex flex-col items-center justify-center h-full gap-2">
-                            <Spinner />
-                            <p className="text-sm text-neutral-500">{statusMessage}</p>
-                            {isLoading && numberOfImages > 1 && (
-                                <p className="text-sm text-neutral-500">
-                                    {`Menjana... (${progress}/${numberOfImages})`}
-                                </p>
-                            )}
-                        </div>
-                    );
+                    return <Spinner />;
                 })()}
             </div>
-             {images.length > 1 && (
-                <div className="flex-shrink-0 w-full flex justify-center">
+            {images.length > 1 && (
+              <div className="flex-shrink-0 w-full flex justify-center">
                 <div className="flex gap-2 overflow-x-auto p-2">
-                    {images.map((img, index) => (
+                  {images.map((img, index) => (
                     <button key={index} onClick={() => setSelectedImageIndex(index)} className={`w-16 h-16 md:w-20 md:h-20 rounded-md overflow-hidden flex-shrink-0 transition-all duration-200 flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 ${selectedImageIndex === index ? 'ring-4 ring-primary-500' : 'ring-2 ring-transparent hover:ring-primary-300'}`}>
-                        {typeof img === 'string' ? (
+                       {typeof img === 'string' ? (
                             <img src={`data:image/png;base64,${img}`} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
                         ) : img && typeof img === 'object' ? (
                             <AlertTriangleIcon className="w-6 h-6 text-red-500" />
@@ -444,29 +445,15 @@ const ImageGenerationView: React.FC<ImageGenerationViewProps> = ({ onCreateVideo
                             <Spinner />
                         )}
                     </button>
-                    ))}
+                  ))}
                 </div>
-                </div>
+              </div>
             )}
-        </div>
-      ) : isLoading ? (
-        <div className="flex flex-col items-center justify-center h-full gap-2">
-            <Spinner />
-            <p className="text-sm text-neutral-500">{statusMessage}</p>
-            <p className="text-sm text-neutral-500">
-                {`Menjana...${numberOfImages > 1 ? ` (1/${numberOfImages})` : ''}`}
-            </p>
-        </div>
-      ) : (
-        <div className="flex items-center justify-center h-full text-center text-neutral-500 dark:text-neutral-600">
-            <div><StarIcon className="w-16 h-16 mx-auto" /><p>Imej yang anda jana akan muncul di sini.</p></div>
         </div>
       )}
     </>
   );
 
-  // FIX: Pass the 'language' prop to the TwoColumnLayout component.
+  // FIX: Add missing return statement to satisfy the React.FC type.
   return <TwoColumnLayout leftPanel={leftPanel} rightPanel={rightPanel} language={language} />;
 };
-
-export default ImageGenerationView;

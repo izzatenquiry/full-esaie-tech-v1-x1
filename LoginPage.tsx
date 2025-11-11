@@ -79,7 +79,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, language }) => {
                     <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-800 text-center">
                         <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">{T.noAccount}</p>
                         <a
-                            href="https://monoklix.com/step/checkout/"
+                            href="https://esaie.tech/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-full inline-block py-3 px-4 border border-primary-500 text-sm font-medium rounded-md text-primary-600 dark:text-primary-400 hover:bg-primary-500/10 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-neutral-950 focus:ring-primary-500 transition-colors"
@@ -89,7 +89,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, language }) => {
                     </div>
                 </>
                  <p className="text-center text-xs text-neutral-500 dark:text-neutral-400 !mt-8">
-                    © 2025 MONOklix.com ({APP_VERSION})
+                    © 2025 ESAIE.TECH ({APP_VERSION})
                 </p>
             </div>
         </div>

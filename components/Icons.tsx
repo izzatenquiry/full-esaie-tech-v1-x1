@@ -256,7 +256,7 @@ export const LightbulbIcon: React.FC<{ className?: string }> = (props) => (
 );
 
 export const LogoIcon: React.FC<{ className?: string }> = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 60" aria-label="MONOklix.com Logo">
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 50" aria-label="ESAIE.TECH Logo">
     <defs>
       <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" style={{ stopColor: '#38bdf8' }} />
@@ -264,18 +264,17 @@ export const LogoIcon: React.FC<{ className?: string }> = (props) => (
         <stop offset="100%" style={{ stopColor: '#a78bfa' }} />
       </linearGradient>
     </defs>
-    <style>
-      {`.heavy { font-family: "Arial Black", Gadget, sans-serif; font-weight: 900; font-size: 48px; letter-spacing: -2px; }`}
-      {`.light { font-family: "Arial", sans-serif; font-weight: 400; font-size: 48px; letter-spacing: -1px; }`}
-      {`.domain { font-family: "Arial", sans-serif; font-weight: 600; font-size: 24px; }`}
-    </style>
-    
-    <text x="0" y="48" fill="url(#grad1)">
-        <tspan className="heavy">MONO</tspan>
-        <tspan className="light" dx="-5">klix</tspan>
+    <text 
+        x="0" 
+        y="40" 
+        fill="url(#grad1)" 
+        fontFamily="Arial Black, Gadget, sans-serif"
+        fontWeight="900"
+        fontSize="40"
+        letterSpacing="-1.5"
+    >
+        ESAIE.TECH
     </text>
-    
-    <text x="220" y="48" className="domain" fill="currentColor">.com</text>
   </svg>
 );
 

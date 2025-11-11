@@ -3,14 +3,14 @@ import { saveData, loadData } from './indexedDBService';
 import { supabase } from './supabaseClient';
 import { MODELS } from './aiConfig';
 
-const TUTORIAL_CONTENT_KEY = 'monoklix-ai-tutorial-content';
-const PLATFORM_STATUS_KEY = 'monoklix-ai-platform-status';
-const ANNOUNCEMENTS_KEY = 'monoklix-ai-announcements';
+const TUTORIAL_CONTENT_KEY = 'esaie-tech-tutorial-content';
+const PLATFORM_STATUS_KEY = 'esaie-tech-platform-status';
+const ANNOUNCEMENTS_KEY = 'esaie-tech-announcements';
 
 const defaultTutorialContent: TutorialContent = {
   mainVideoUrl: 'https://www.youtube.com/embed/G6G8JJrV9VM',
-  mainTitle: 'Selamat Datang ke MONOKlix.com',
-  mainDescription: 'Selamat datang! Video ini adalah pengenalan anda kepada platform MONOKlix.com. Fahami gambaran keseluruhan, ciri-ciri hebat, dan cara untuk memulakan projek kreatif anda dengan bantuan AI.',
+  mainTitle: 'Selamat Datang ke ESAIE.TECH',
+  mainDescription: 'Selamat datang! Video ini adalah pengenalan anda kepada platform ESAIE.TECH. Fahami gambaran keseluruhan, ciri-ciri hebat, dan cara untuk memulakan projek kreatif anda dengan bantuan AI.',
   tutorials: [
     // Temporarily disabled as per user request.
   ]
@@ -26,7 +26,7 @@ const defaultAnnouncements: Announcement[] = [
     {
         id: 'anno-1',
         title: 'Selamat Datang ke Platform Baharu!',
-        content: 'Kami teruja untuk melancarkan platform AI MONOKlix.com yang serba baharu. Terokai ciri-ciri yang ada dan mula mencipta hari ini.',
+        content: 'Kami teruja untuk melancarkan platform AI ESAIE.TECH yang serba baharu. Terokai ciri-ciri yang ada dan mula mencipta hari ini.',
         category: 'Umum',
         createdAt: new Date().toISOString(),
     },

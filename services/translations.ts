@@ -114,7 +114,7 @@ const translations = {
         },
         loginPage: {
             title: 'Welcome Back!',
-            subtitle: 'Log in to access the MONOklix.com AI platform.',
+            subtitle: 'Log in to access the ESAIE.TECH AI platform.',
             emailPlaceholder: 'Enter your registered email address',
             loginButton: 'Log In',
             noAccount: "Don't have an account?",
@@ -172,10 +172,10 @@ const translations = {
         // All Views
         getStartedView: {
             title: 'Get Started Guide',
-            subtitle: 'Your comprehensive guide to mastering the MONOklix.com AI platform.',
-            overviewTitle: 'Overview: How MONOklix Works',
+            subtitle: 'Your comprehensive guide to mastering the ESAIE.TECH AI platform.',
+            overviewTitle: 'Overview: How ESAIE.TECH Works',
             overviewP1: 'Before you begin, it’s important to understand the two parts of our service. Think of our platform like a high-performance car:',
-            overviewL1: 'The MONOklix Platform is the car: Your account gives you access to the dashboard, the tools (like the Image and Video Suites), and the garage (your Gallery). You’re in the driver’s seat.',
+            overviewL1: 'The ESAIE.TECH Platform is the car: Your account gives you access to the dashboard, the tools (like the Image and Video Suites), and the garage (your Gallery). You’re in the driver’s seat.',
             overviewL2: 'Google\'s AI API is the "fuel": To make the car go (to generate content), you need fuel. This is provided by Google\'s powerful AI engine, and it requires an API Key to access.',
             overviewP2: 'This guide will explain how the "fuel" is provided automatically and how these services work.',
             
@@ -184,18 +184,18 @@ const translations = {
             ch1s1P1: 'The platform uses a simple, password-free login system. Just enter the email address you used for registration on our main website and click \'Log In\'. Your session will be saved automatically.',
             ch1s2Title: 'The API Key: Fully Automated!',
             ch1s2P1: 'Good news: You do not need to get or manage your own API key.',
-            ch1s2P2: 'The MONOklix platform handles everything for you. When you log in, the system automatically loads a shared, central API key that gives you access to all AI features. You can confirm the key is active by looking for the icon in the top-right corner of the screen.',
+            ch1s2P2: 'The ESAIE.TECH platform handles everything for you. When you log in, the system automatically loads a shared, central API key that gives you access to all AI features. You can confirm the key is active by looking for the icon in the top-right corner of the screen.',
             ch1s2P3: 'This system ensures you have a seamless experience without any complex setup.',
 
             ch2Title: 'Chapter 2: Understanding Costs & Billing',
-            ch2P1: 'MONOklix.com operates on a subscription basis, which covers your access to the platform and the cost of AI usage.',
+            ch2P1: 'ESAIE.TECH operates on a subscription basis, which covers your access to the platform and the cost of AI usage.',
             ch2L1: 'No Per-Use Billing: You are not billed for every image or video you generate. Your account status (e.g., Lifetime, Subscription) determines your access to the AI features.',
             ch2L2: 'Fair Use Policy: While we don’t have hard limits, the service is subject to a fair use policy to ensure stable performance for all users. The shared API key has a high daily quota, which is more than sufficient for professional use.',
-            ch2L3: 'You Are in Full Control: Your access is managed entirely through your account status on MONOklix.com. You do not need a Google Cloud account or a separate billing setup.',
+            ch2L3: 'You Are in Full Control: Your access is managed entirely through your account status on ESAIE.TECH. You do not need a Google Cloud account or a separate billing setup.',
 
             ch3Title: 'Chapter 3: The AI Content Idea Suite',
             ch3P1: 'This suite is designed to help you brainstorm and create written content for your marketing needs.',
-            ch3L1: '<strong>Staff MONOklix:</strong> A team of specialized AI agents. Select an agent (like a Market Researcher or a Copywriter), provide your input, and get expert-level output for specific tasks.',
+            ch3L1: '<strong>Staff ESAIE.TECH:</strong> A team of specialized AI agents. Select an agent (like a Market Researcher or a Copywriter), provide your input, and get expert-level output for specific tasks.',
             ch3L2: '<strong>Content Ideas:</strong> Break through creative blocks by entering a topic. The AI uses Google Search to find current trends and generates 5 fresh content ideas with titles and descriptions.',
             ch3L3: '<strong>Marketing Copy:</strong> Craft persuasive copy for ads, social media, or websites. Just describe the product, target audience, and desired tone.',
             ch3L4: '<strong>Storyline Generator:</strong> The perfect starting point for a video ad. Upload a product image, write a brief description, and the AI will generate a complete 1-scene storyboard concept.',
@@ -285,7 +285,7 @@ const translations = {
             ch9s2L3: '<strong>Why is it useful?</strong> It’s an excellent tool for debugging. If a generation fails, the log will often contain the specific error message from the API that can help you understand why (e.g., safety block, invalid API key).',
             ch9s3Title: 'Storage',
             ch9s3P1: 'Because all data is stored locally in your browser, clearing your browser’s cache or site data will permanently delete your gallery and log history. We do not store your generated content on our servers.',
-
+            
             ch10Title: 'Chapter 10: Troubleshooting Common Errors',
             ch10P1: 'If you encounter an error, it’s usually due to one of a few common issues. Here’s a quick guide on what they mean and how to solve them.',
             ch10Table: {
@@ -294,7 +294,7 @@ const translations = {
                 header3: 'Solution',
                 row1_1: 'Email not registered',
                 row1_2: 'The user entered an email that does not exist in the database.',
-                row1_3: "1. Double-check the email spelling.<br/>2. Ensure the user has registered on the main website (monoklix.com).<br/>3. If it still fails, contact an admin to check the account status.",
+                row1_3: "1. Double-check the email spelling.<br/>2. Ensure the user has registered on the main website (ESAIE.TECH).<br/>3. If it still fails, contact an admin to check the account status.",
                 row2_1: 'Account is inactive',
                 row2_2: 'The user\'s status has been set to inactive by an admin.',
                 row2_3: 'Contact an admin for account reactivation.',
@@ -333,8 +333,8 @@ const translations = {
         eCourseView: {
             getStarted: 'Getting Started',
             mainVideoUrl: 'https://www.youtube.com/embed/G6G8JJrV9VM',
-            mainTitle: 'Welcome to MONOKlix.com',
-            mainDescription: 'Welcome! This video is your introduction to the MONOklix.com platform. Understand the overview, powerful features, and how to get started on your AI-powered creative projects.',
+            mainTitle: 'Welcome to ESAIE.TECH',
+            mainDescription: 'Welcome! This video is your introduction to the ESAIE.TECH platform. Understand the overview, powerful features, and how to get started on your AI-powered creative projects.',
             platformUpdates: 'Platform Updates',
             status: {
                 operational: 'All Systems Operational',
@@ -349,13 +349,13 @@ const translations = {
         },
         aiTextSuiteView: {
             tabs: {
-                staff: 'Staff MONOklix',
+                staff: 'Staff ESAIE.TECH',
                 contentIdeas: 'Content Ideas',
                 marketingCopy: 'Marketing Copy'
             }
         },
         staffMonoklixView: {
-            title: 'Staff MONOklix',
+            title: 'Staff ESAIE.TECH',
             subtitle: 'A team of specialized AI agents to help you with your tasks.',
             inputFor: 'Input for',
             outputLanguage: 'Output Language',
@@ -750,13 +750,13 @@ const translations = {
                 failLoad: 'Failed to load cache statistics',
             },
             api: {
-                title: 'MONOklix API Keys',
+                title: 'ESAIE.TECH API Keys',
                 description: 'This platform uses a shared, central API key for all AI services. You do not need to provide your own key. The status of the shared key is shown below.',
                 sharedStatus: 'Shared API Key Status:',
                 connected: 'Connected',
                 notLoaded: 'Not Loaded',
                 
-                authTokenTitle: 'MONOklix Auth Token',
+                authTokenTitle: 'ESAIE.TECH Auth Token',
                 authTokenPlaceholder: 'Paste your personal __SESSION token here',
                 save: 'Save',
                 saving: 'Saving...',
@@ -1039,7 +1039,7 @@ const translations = {
         },
         loginPage: {
             title: 'Selamat Datang Kembali!',
-            subtitle: 'Log masuk untuk mengakses platform AI MONOklix.com.',
+            subtitle: 'Log masuk untuk mengakses platform ESAIE.TECH.',
             emailPlaceholder: 'Masukkan alamat e-mel berdaftar anda',
             loginButton: 'Log Masuk',
             noAccount: "Tiada akaun?",
@@ -1096,10 +1096,10 @@ const translations = {
         },
         getStartedView: {
             title: 'Panduan Mula',
-            subtitle: 'Panduan komprehensif anda untuk menguasai platform AI MONOklix.com.',
-            overviewTitle: 'Gambaran Keseluruhan: Cara MONOklix Berfungsi',
+            subtitle: 'Panduan komprehensif anda untuk menguasai platform AI ESAIE.TECH.',
+            overviewTitle: 'Gambaran Keseluruhan: Cara ESAIE.TECH Berfungsi',
             overviewP1: 'Sebelum anda bermula, penting untuk memahami dua bahagian perkhidmatan kami. Fikirkan platform kami seperti kereta berprestasi tinggi:',
-            overviewL1: 'Platform MONOklix adalah kereta: Akaun anda memberi anda akses kepada papan pemuka, alatan (seperti Suite Imej dan Video), dan garaj (Galeri anda). Anda berada di tempat duduk pemandu.',
+            overviewL1: 'Platform ESAIE.TECH adalah kereta: Akaun anda memberi anda akses kepada papan pemuka, alatan (seperti Suite Imej dan Video), dan garaj (Galeri anda). Anda berada di tempat duduk pemandu.',
             overviewL2: 'API Google AI adalah "bahan api": Untuk membuat kereta bergerak (untuk menjana kandungan), anda memerlukan bahan api. Ini disediakan oleh enjin AI Google yang berkuasa, dan ia memerlukan **Kunci API** untuk diakses.',
             overviewP2: 'Panduan ini akan menerangkan bagaimana "bahan api" disediakan secara automatik dan bagaimana perkhidmatan ini berfungsi.',
             
@@ -1108,18 +1108,18 @@ const translations = {
             ch1s1P1: 'Platform ini menggunakan sistem log masuk yang mudah dan tanpa kata laluan. Hanya masukkan alamat e-mel yang anda gunakan untuk pendaftaran di laman web utama kami dan klik \'Log Masuk\'. Sesi anda akan disimpan secara automatik.',
             ch1s2Title: 'Kunci API: Automatik Sepenuhnya!',
             ch1s2P1: 'Berita baik: Anda tidak perlu mendapatkan atau mengurus kunci API anda sendiri.',
-            ch1s2P2: 'Platform MONOklix menguruskan semuanya untuk anda. Apabila anda log masuk, sistem secara automatik memuatkan kunci API pusat yang dikongsi yang memberi anda akses kepada semua ciri AI. Anda boleh mengesahkan kunci itu aktif dengan mencari ikon di penjuru kanan atas skrin.',
+            ch1s2P2: 'Platform ESAIE.TECH menguruskan semuanya untuk anda. Apabila anda log masuk, sistem secara automatik memuatkan kunci API pusat yang dikongsi yang memberi anda akses kepada semua ciri AI. Anda boleh mengesahkan kunci itu aktif dengan mencari ikon di penjuru kanan atas skrin.',
             ch1s2P3: 'Sistem ini memastikan anda mempunyai pengalaman yang lancar tanpa sebarang persediaan yang rumit.',
 
             ch2Title: 'Bab 2: Memahami Kos & Pengebilan',
-            ch2P1: 'MONOklix.com beroperasi berdasarkan langganan, yang merangkumi akses anda ke platform dan kos penggunaan AI.',
+            ch2P1: 'ESAIE.TECH beroperasi berdasarkan langganan, yang merangkumi akses anda ke platform dan kos penggunaan AI.',
             ch2L1: 'Tiada Pengebilan Setiap Penggunaan: Anda tidak dibilkan untuk setiap imej atau video yang anda jana. Status akaun anda (cth., Seumur Hidup, Langganan) menentukan akses anda kepada ciri-ciri AI.',
             ch2L2: 'Polisi Penggunaan Adil: Walaupun kami tidak mempunyai had yang ketat, perkhidmatan ini tertakluk kepada polisi penggunaan adil untuk memastikan prestasi yang stabil untuk semua pengguna. Kunci API yang dikongsi mempunyai kuota harian yang tinggi, yang lebih daripada mencukupi untuk kegunaan profesional.',
-            ch2L3: 'Anda Mengawal Sepenuhnya: Akses anda diuruskan sepenuhnya melalui status akaun anda di MONOklix.com. Anda tidak memerlukan akaun Google Cloud atau persediaan pengebilan yang berasingan.',
+            ch2L3: 'Anda Mengawal Sepenuhnya: Akses anda diuruskan sepenuhnya melalui status akaun anda di ESAIE.TECH. Anda tidak memerlukan akaun Google Cloud atau persediaan pengebilan yang berasingan.',
 
             ch3Title: 'Bab 3: Suite Idea Kandungan AI',
             ch3P1: 'Suite ini direka untuk membantu anda sumbang saran dan mencipta kandungan bertulis untuk keperluan pemasaran anda.',
-            ch3L1: '<strong class="font-semibold">Staf MONOklix:</strong> Satu pasukan ejen AI khusus. Pilih ejen (seperti Penyelidik Pasaran atau Penulis Iklan), berikan input anda, dan dapatkan output peringkat pakar untuk tugas-tugas tertentu.',
+            ch3L1: '<strong class="font-semibold">Staf ESAIE.TECH:</strong> Satu pasukan ejen AI khusus. Pilih ejen (seperti Penyelidik Pasaran atau Penulis Iklan), berikan input anda, dan dapatkan output peringkat pakar untuk tugas-tugas tertentu.',
             ch3L2: '<strong class="font-semibold">Idea Kandungan:</strong> Atasi kebuntuan kreatif dengan memasukkan topik. AI menggunakan Carian Google untuk mencari trend semasa dan menjana 5 idea kandungan segar dengan tajuk dan penerangan.',
             ch3L3: '<strong class="font-semibold">Teks Pemasaran:</strong> Cipta teks pemasaran yang meyakinkan untuk iklan, media sosial, atau laman web. Hanya terangkan produk, sasaran audiens, dan nada yang dikehendaki.',
             ch3L4: '<strong class="font-semibold">Penjana Jalan Cerita:</strong> Titik permulaan yang sempurna untuk iklan video. Muat naik imej produk, tulis penerangan ringkas, dan AI akan menjana konsep papan cerita 1 babak yang lengkap.',
@@ -1218,7 +1218,7 @@ const translations = {
                 header3: 'Penyelesaian',
                 row1_1: 'E-mel tidak berdaftar',
                 row1_2: 'Pengguna memasukkan e-mel yang tidak wujud dalam pangkalan data.',
-                row1_3: "1. Semak semula ejaan e-mel.<br/>2. Pastikan pengguna telah mendaftar di laman web utama (monoklix.com).<br/>3. Jika masih gagal, hubungi admin untuk menyemak status akaun.",
+                row1_3: "1. Semak semula ejaan e-mel.<br/>2. Pastikan pengguna telah mendaftar di laman web utama (ESAIE.TECH).<br/>3. Jika masih gagal, hubungi admin untuk menyemak status akaun.",
                 row2_1: 'Akaun tidak aktif (inactive)',
                 row2_2: 'Status pengguna telah ditukar kepada tidak aktif oleh admin.',
                 row2_3: 'Hubungi admin untuk pengaktifan semula akaun.',
@@ -1257,8 +1257,8 @@ const translations = {
         eCourseView: {
             getStarted: 'Mula Di Sini',
             mainVideoUrl: 'https://www.youtube.com/embed/G6G8JJrV9VM',
-            mainTitle: 'Selamat Datang ke MONOKlix.com',
-            mainDescription: 'Selamat datang! Video ini adalah pengenalan anda kepada platform MONOKlix.com. Fahami gambaran keseluruhan, ciri-ciri hebat, dan cara untuk memulakan projek kreatif anda dengan bantuan AI.',
+            mainTitle: 'Selamat Datang ke ESAIE.TECH',
+            mainDescription: 'Selamat datang! Video ini adalah pengenalan anda kepada platform ESAIE.TECH. Fahami gambaran keseluruhan, ciri-ciri hebat, dan cara untuk memulakan projek kreatif anda dengan bantuan AI.',
             platformUpdates: 'Kemas Kini Platform',
             status: {
                 operational: 'Semua Sistem Beroperasi',
@@ -1273,13 +1273,13 @@ const translations = {
         },
         aiTextSuiteView: {
             tabs: {
-                staff: 'Staf MONOklix',
+                staff: 'Staf ESAIE.TECH',
                 contentIdeas: 'Idea Konten',
                 marketingCopy: 'Teks Pemasaran'
             }
         },
         staffMonoklixView: {
-            title: 'Staf MONOklix',
+            title: 'Staf ESAIE.TECH',
             subtitle: 'Satu pasukan ejen AI khusus untuk membantu anda dengan tugasan anda.',
             inputFor: 'Input untuk',
             outputLanguage: 'Bahasa Output',
@@ -1674,13 +1674,13 @@ const translations = {
                 failLoad: 'Gagal memuatkan statistik cache',
             },
             api: {
-                title: 'Kunci API MONOklix',
+                title: 'Kunci API ESAIE.TECH',
                 description: 'Platform ini menggunakan kunci API pusat yang dikongsi untuk semua perkhidmatan AI. Anda tidak perlu menyediakan kunci anda sendiri. Status kunci kongsi ditunjukkan di bawah.',
                 sharedStatus: 'Status Kunci API Kongsi:',
                 connected: 'Bersambung',
                 notLoaded: 'Tidak Dimuatkan',
                 
-                authTokenTitle: 'Token Pengesahan MONOklix',
+                authTokenTitle: 'Token Pengesahan ESAIE.TECH',
                 authTokenPlaceholder: 'Tampal token __SESSION peribadi anda di sini',
                 save: 'Simpan',
                 saving: 'Menyimpan...',

@@ -16,7 +16,7 @@ import { generateImageWithImagen } from "./imagenV3Service";
 const getActiveApiKey = (): string | null => {
     // This key is set and managed by App.tsx, which places the correct key
     // (either user's personal key or a temporary claimed key) into session storage.
-    return sessionStorage.getItem('monoklix_session_api_key');
+    return sessionStorage.getItem('esaie_tech_session_api_key');
 };
 
 const getAiInstance = () => { // No longer async
@@ -226,7 +226,7 @@ export const generateVideo = async (
             throw new Error(`Background download failed with status: ${response.status}`);
         }
         const blob = await response.blob();
-        const videoFile = new File([blob], `monoklix-veo3-${Date.now()}.mp4`, { type: 'video/mp4' });
+        const videoFile = new File([blob], `esaie-tech-veo3-${Date.now()}.mp4`, { type: 'video/mp4' });
 
         return { videoFile, thumbnailUrl };
 

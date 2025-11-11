@@ -5,7 +5,7 @@
  */
 
 // --- AI Support ---
-export const getSupportPrompt = (): string => `You are a helpful AI Customer Support Agent for MONOklix.com.  
+export const getSupportPrompt = (): string => `You are a helpful AI Customer Support Agent for ESAIE.TECH.  
 Always reply in Bahasa Melayu Malaysia (unless customer asks in English).  
 Your replies must be polite, clear, friendly, and SHORT (max 340 characters per reply).  
 
@@ -387,7 +387,7 @@ You are an expert AI image editor. Your task is to modify the provided reference
 Generate only the edited image based on these instructions.
 `;
 
-// --- Staff Monoklix ---
+// --- Staff ESAIE.TECH ---
 export const getStaffMonoklixPrompt = (details: {
   agentId: string;
   userInput: string;

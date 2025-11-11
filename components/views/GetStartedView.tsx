@@ -38,16 +38,16 @@ const GetStartedView: React.FC<GetStartedViewProps> = () => {
                     Panduan Mula
                 </h1>
                 <p className="mt-3 text-lg text-neutral-500 dark:text-neutral-400">
-                    Panduan komprehensif anda untuk menguasai platform AI MONOklix.com.
+                    Panduan komprehensif anda untuk menguasai platform AI ESAIC.TECH.
                 </p>
             </div>
 
             <div className="bg-white dark:bg-neutral-900 p-6 sm:p-8 rounded-lg shadow-lg">
 
-                <Section title="Gambaran Keseluruhan: Cara MONOklix Berfungsi" icon={InformationCircleIcon}>
+                <Section title="Gambaran Keseluruhan: Cara ESAIC.TECH Berfungsi" icon={InformationCircleIcon}>
                     <p>Sebelum anda bermula, penting untuk memahami dua bahagian perkhidmatan kami. Fikirkan platform kami seperti kereta berprestasi tinggi:</p>
                     <ul className="list-disc pl-5 space-y-2">
-                      <li><strong>Platform MONOklix adalah kereta:</strong> Akaun anda memberi anda akses kepada papan pemuka, alatan (seperti Suite Imej dan Video), dan garaj (Galeri anda). Anda berada di tempat duduk pemandu.</li>
+                      <li><strong>Platform ESAIC.TECH adalah kereta:</strong> Akaun anda memberi anda akses kepada papan pemuka, alatan (seperti Suite Imej dan Video), dan garaj (Galeri anda). Anda berada di tempat duduk pemandu.</li>
                       <li><strong>API Google AI adalah "bahan api":</strong> Untuk membuat kereta bergerak (untuk menjana kandungan), anda memerlukan bahan api. Ini disediakan oleh enjin AI Google yang berkuasa, dan ia memerlukan **Kunci API** untuk diakses.</li>
                     </ul>
                     <p>Panduan ini akan menerangkan bagaimana "bahan api" disediakan secara automatik dan bagaimana perkhidmatan ini berfungsi.</p>
@@ -59,24 +59,24 @@ const GetStartedView: React.FC<GetStartedViewProps> = () => {
                     </SubSection>
                     <SubSection title="Kunci API: Automatik Sepenuhnya!">
                         <p className="font-semibold text-green-600 dark:text-green-400">Berita baik: Anda tidak perlu mendapatkan atau mengurus kunci API anda sendiri.</p>
-                        <p>Platform MONOklix menguruskan semuanya untuk anda. Apabila anda log masuk, sistem secara automatik memuatkan kunci API pusat yang dikongsi yang memberi anda akses kepada semua ciri AI. Anda boleh mengesahkan kunci itu aktif dengan mencari ikon <KeyIcon className="w-4 h-4 inline-block text-green-500" /> di penjuru kanan atas skrin.</p>
+                        <p>Platform ESAIC.TECH menguruskan semuanya untuk anda. Apabila anda log masuk, sistem secara automatik memuatkan kunci API pusat yang dikongsi yang memberi anda akses kepada semua ciri AI. Anda boleh mengesahkan kunci itu aktif dengan mencari ikon <KeyIcon className="w-4 h-4 inline-block text-green-500" /> di penjuru kanan atas skrin.</p>
                         <p>Sistem ini memastikan anda mempunyai pengalaman yang lancar tanpa sebarang persediaan yang rumit.</p>
                     </SubSection>
                 </Section>
                 
                 <Section title="Bab 2: Memahami Kos & Pengebilan" icon={CreditCardIcon}>
-                    <p className="font-semibold">MONOklix.com beroperasi berdasarkan langganan, yang merangkumi akses anda ke platform dan kos penggunaan AI.</p>
+                    <p className="font-semibold">ESAIC.TECH beroperasi berdasarkan langganan, yang merangkumi akses anda ke platform dan kos penggunaan AI.</p>
                     <ul className="list-disc pl-5 space-y-2">
                         <li><strong>Tiada Pengebilan Setiap Penggunaan:</strong> Anda tidak dibilkan untuk setiap imej atau video yang anda jana. Status akaun anda (cth., Seumur Hidup, Langganan) menentukan akses anda kepada ciri-ciri AI.</li>
                         <li><strong>Polisi Penggunaan Adil:</strong> Walaupun kami tidak mempunyai had yang ketat, perkhidmatan ini tertakluk kepada polisi penggunaan adil untuk memastikan prestasi yang stabil untuk semua pengguna. Kunci API yang dikongsi mempunyai kuota harian yang tinggi, yang lebih daripada mencukupi untuk kegunaan profesional.</li>
-                        <li><strong>Anda Mengawal Sepenuhnya:</strong> Akses anda diuruskan sepenuhnya melalui status akaun anda di MONOklix.com. Anda tidak memerlukan akaun Google Cloud atau persediaan pengebilan yang berasingan.</li>
+                        <li><strong>Anda Mengawal Sepenuhnya:</strong> Akses anda diuruskan sepenuhnya melalui status akaun anda di ESAIC.TECH. Anda tidak memerlukan akaun Google Cloud atau persediaan pengebilan yang berasingan.</li>
                     </ul>
                 </Section>
                 
                 <Section title="Bab 3: Suite Idea Kandungan AI" icon={LightbulbIcon}>
                     <p>Suite ini direka untuk membantu anda sumbang saran dan mencipta kandungan bertulis untuk keperluan pemasaran anda.</p>
                      <ul className="list-disc pl-5 space-y-2">
-                        <li dangerouslySetInnerHTML={{ __html: '<strong class="font-semibold">Staf MONOklix:</strong> Satu pasukan ejen AI khusus. Pilih ejen (seperti Penyelidik Pasaran atau Penulis Iklan), berikan input anda, dan dapatkan output peringkat pakar untuk tugas-tugas tertentu.' }}/>
+                        <li dangerouslySetInnerHTML={{ __html: '<strong class="font-semibold">Staf ESAIC.TECH:</strong> Satu pasukan ejen AI khusus. Pilih ejen (seperti Penyelidik Pasaran atau Penulis Iklan), berikan input anda, dan dapatkan output peringkat pakar untuk tugas-tugas tertentu.' }}/>
                         <li dangerouslySetInnerHTML={{ __html: '<strong class="font-semibold">Idea Kandungan:</strong> Atasi kebuntuan kreatif dengan memasukkan topik. AI menggunakan Carian Google untuk mencari trend semasa dan menjana 5 idea kandungan segar dengan tajuk dan penerangan.' }}/>
                         <li dangerouslySetInnerHTML={{ __html: '<strong class="font-semibold">Teks Pemasaran:</strong> Cipta teks pemasaran yang meyakinkan untuk iklan, media sosial, atau laman web. Hanya terangkan produk, sasaran audiens, dan nada yang dikehendaki.' }}/>
                         <li dangerouslySetInnerHTML={{ __html: '<strong class="font-semibold">Penjana Jalan Cerita:</strong> Titik permulaan yang sempurna untuk iklan video. Muat naik imej produk, tulis penerangan ringkas, dan AI akan menjana konsep papan cerita 1 babak yang lengkap.' }}/>
