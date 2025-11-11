@@ -143,7 +143,7 @@ const AssigningTokenModal: React.FC<AssigningTokenModalProps> = ({ status, error
 };
 
 const SERVERS = [
-    'https://esaie-s1.monoklix.com/',
+    'https://s1.esaie.tech',
     'https://s2.esaie.tech',
     'https://s3.esaie.tech',
     'https://s4.esaie.tech',
