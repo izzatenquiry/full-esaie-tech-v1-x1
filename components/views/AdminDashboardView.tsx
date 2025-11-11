@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { getAllUsers, updateUserStatus, replaceUsers, exportAllUserData, forceUserLogout, updateUserSubscription, saveUserPersonalAuthToken } from '../../services/userService';
-import { type User, type UserStatus, type Language } from '../../types';
-import { UsersIcon, XIcon, DownloadIcon, UploadIcon, CheckCircleIcon, AlertTriangleIcon, VideoIcon } from '../Icons';
+import { getAllUsers, updateUserStatus, replaceUsers, exportAllUserData, forceUserLogout, updateUserSubscription, saveUserPersonalAuthToken, createNewUser } from '../../services/userService';
+import { type User, type UserStatus, type Language, UserRole } from '../../types';
+import { UsersIcon, XIcon, DownloadIcon, UploadIcon, CheckCircleIcon, AlertTriangleIcon, VideoIcon, UserPlusIcon } from '../Icons';
 import Spinner from '../common/Spinner';
 import ApiHealthCheckModal from '../common/ApiHealthCheckModal';
 import ConfirmationModal from '../common/ConfirmationModal';
+import { getTranslations } from '../../services/translations';
 
 const formatStatus = (user: User): { text: string; color: 'green' | 'yellow' | 'red' | 'blue' } => {
     switch(user.status) {
@@ -81,10 +82,12 @@ interface AdminDashboardViewProps {
 }
 
 const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => {
+    const T = getTranslations(language).adminDashboardView;
     const [users, setUsers] = useState<User[] | null>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [newStatus, setNewStatus] = useState<UserStatus>('trial');
     const [subscriptionDuration, setSubscriptionDuration] = useState<6 | 12>(6);
@@ -94,6 +97,9 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
     const [userForHealthCheck, setUserForHealthCheck] = useState<User | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isConfirmLogoutOpen, setIsConfirmLogoutOpen] = useState(false);
+    
+    const [newUser, setNewUser] = useState({ fullName: '', email: '', phone: '', role: 'user' as UserRole, status: 'lifetime' as UserStatus });
+    const [modalError, setModalError] = useState<string | null>(null);
 
     const fetchUsers = useCallback(async () => {
         setLoading(true);
@@ -114,14 +120,37 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
         setSelectedUser(user);
         setNewStatus(user.status);
         setPersonalToken(user.personalAuthToken || '');
-        setIsModalOpen(true);
+        setIsEditModalOpen(true);
+    };
+    
+    const openAddUserModal = () => {
+        setNewUser({ fullName: '', email: '', phone: '', role: 'user', status: 'lifetime' });
+        setModalError(null);
+        setIsAddUserModalOpen(true);
     };
 
     const veoAuthorizedUsersCount = useMemo(() => {
         if (!users) return 0;
-        // FIX: Correctly count users with an assigned token, which is the true measure of a "Veo 3.0 User".
         return users.filter(u => u.personalAuthToken).length;
     }, [users]);
+    
+    const handleCreateUser = async () => {
+        setModalError(null);
+        setStatusMessage({ type: 'loading', message: T.addModal.creating });
+        const result = await createNewUser(newUser);
+
+        if (result.success) {
+            setStatusMessage({ type: 'success', message: T.messages.userCreateSuccess.replace('{email}', newUser.email) });
+            setIsAddUserModalOpen(false);
+            fetchUsers();
+            setTimeout(() => setStatusMessage(null), 5000);
+        } else {
+            const errorKey = result.messageKey as keyof typeof T.messages;
+            const errorMessage = T.messages[errorKey] || result.messageKey || 'An unknown error occurred.';
+            setModalError(errorMessage);
+            setStatusMessage(null); // Clear main page message
+        }
+    };
 
     const handleSaveChanges = async () => {
         if (!selectedUser) return;
@@ -153,8 +182,6 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
             if (newToken === currentToken) return resolve({ success: true });
 
             const result = await saveUserPersonalAuthToken(selectedUser.id, newToken || null);
-            // FIX: Explicitly check for `result.success === false` to help TypeScript correctly
-            // narrow the discriminated union type, allowing access to `result.message` in the error case.
             if (result.success === false) {
                 resolve({ success: false, message: result.message });
             } else {
@@ -168,8 +195,6 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
         if (!statusResult.success) {
             errorMessages.push(statusResult.message || 'Gagal mengemas kini status.');
         }
-        // FIX: Explicitly check for `tokenResult.success === false` to help TypeScript correctly
-        // narrow the type and allow safe access to the `message` property.
         if (tokenResult.success === false) {
             errorMessages.push(tokenResult.message || 'Gagal mengemas kini token.');
         }
@@ -181,7 +206,7 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
             fetchUsers();
         }
 
-        setIsModalOpen(false);
+        setIsEditModalOpen(false);
         setSelectedUser(null);
         setTimeout(() => setStatusMessage(null), 5000);
     };
@@ -200,7 +225,7 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
         } else {
              setStatusMessage({ type: 'error', message: 'Gagal menamatkan sesi.' });
         }
-        setIsModalOpen(false);
+        setIsEditModalOpen(false);
         setIsConfirmLogoutOpen(false);
         setSelectedUser(null);
         setTimeout(() => setStatusMessage(null), 4000);
@@ -211,7 +236,7 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
         setStatusMessage(null);
         const usersToExport = await exportAllUserData();
         if (!usersToExport) {
-            setStatusMessage({ type: 'error', message: 'Eksport gagal: Pangkalan data pengguna rosak.' });
+            setStatusMessage({ type: 'error', message: T.messages.exportFail });
             setTimeout(() => setStatusMessage(null), 4000);
             return;
         }
@@ -228,7 +253,7 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
-            setStatusMessage({ type: 'success', message: 'Data pengguna berjaya dieksport.' });
+            setStatusMessage({ type: 'success', message: T.messages.exportSuccess });
         } catch (error) {
              setStatusMessage({ type: 'error', message: 'Gagal mencipta fail eksport.' });
         }
@@ -244,12 +269,12 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
         const file = event.target.files?.[0];
         if (!file) return;
 
-        if (window.confirm("Adakah anda pasti mahu menggantikan semua data pengguna sedia ada dengan kandungan fail ini? Tindakan ini tidak boleh dibatalkan.")) {
+        if (window.confirm(T.messages.importConfirm)) {
             const reader = new FileReader();
             reader.onload = async (e) => {
                 try {
                     const text = e.target?.result;
-                    if (typeof text !== 'string') throw new Error("Gagal membaca fail.");
+                    if (typeof text !== 'string') throw new Error(T.messages.importReadFail);
                     
                     const importedUsers = JSON.parse(text);
                     const result = await replaceUsers(importedUsers);
@@ -261,7 +286,8 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
                         setStatusMessage({ type: 'error', message: result.message });
                     }
                 } catch (error) {
-                    setStatusMessage({ type: 'error', message: `Ralat mengimport fail: ${error instanceof Error ? error.message : 'Format fail tidak sah.'}` });
+                    const errorMessage = error instanceof Error ? error.message : 'Format fail tidak sah.';
+                    setStatusMessage({ type: 'error', message: T.messages.importError.replace('{error}', errorMessage) });
                 } finally {
                      if(event.target) event.target.value = '';
                      setTimeout(() => setStatusMessage(null), 5000);
@@ -307,14 +333,14 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
     }, [users]);
 
     if (loading) {
-        return <div>Memuatkan pengguna...</div>;
+        return <div>{T.loading}</div>;
     }
 
     if (users === null) {
         return (
             <div className="bg-red-100 dark:bg-red-900/50 border border-red-400 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg" role="alert">
                 <strong className="font-bold">Ralat Kritikal:</strong>
-                <span className="block sm:inline"> Pangkalan data pengguna rosak dan tidak dapat dibaca. Sila hubungi sokongan.</span>
+                <span className="block sm:inline"> {T.fail}</span>
             </div>
         );
     }
@@ -322,13 +348,13 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
     return (
         <>
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-sm">
-                <h2 className="text-xl font-semibold mb-2">Pangkalan Data Pengguna</h2>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Urus pengguna, langganan, dan sandaran pangkalan data.</p>
+                <h2 className="text-xl font-semibold mb-2">{T.title}</h2>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6">{T.subtitle}</p>
                 
                 <div className="flex justify-between items-center mb-4 flex-wrap gap-4">
                     <input
                         type="text"
-                        placeholder="Cari mengikut nama pengguna atau e-mel..."
+                        placeholder={T.searchPlaceholder}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full max-w-sm bg-white dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:outline-none transition"
@@ -339,24 +365,28 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                             </span>
-                            <span>{activeUsersCount} Pengguna Aktif</span>
+                            <span>{T.activeUsers.replace('{count}', String(activeUsersCount))}</span>
                         </div>
                         <div className={`flex items-center gap-2 text-sm font-semibold py-2 px-3 rounded-lg ${veoAuthorizedUsersCount >= 4 ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300'}`}>
                             {veoAuthorizedUsersCount >= 4 ? <AlertTriangleIcon className="w-4 h-4" /> : <VideoIcon className="w-4 h-4" />}
-                            <span>Pengguna Veo 3.0: {veoAuthorizedUsersCount} / 4</span>
+                            <span>{T.veoUsers.replace('{count}', String(veoAuthorizedUsersCount))}</span>
                         </div>
                          <button onClick={() => { setUserForHealthCheck(null); setIsHealthModalOpen(true); }} className="flex items-center gap-2 text-sm bg-blue-600 text-white font-semibold py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors">
                             <CheckCircleIcon className="w-4 h-4" />
-                            Ringkasan Kesihatan API
+                            {T.healthSummary}
                         </button>
                         <input type="file" ref={fileInputRef} onChange={handleFileImport} accept=".json" className="hidden" />
+                        <button onClick={openAddUserModal} className="flex items-center gap-2 text-sm bg-primary-600 text-white font-semibold py-2 px-3 rounded-lg hover:bg-primary-700 transition-colors">
+                            <UserPlusIcon className="w-4 h-4" />
+                            {T.addUser}
+                        </button>
                         <button onClick={handleImportClick} className="flex items-center gap-2 text-sm bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 font-semibold py-2 px-3 rounded-lg hover:bg-neutral-300 dark:hover:bg-neutral-600 transition-colors">
                             <UploadIcon className="w-4 h-4" />
-                            Import
+                            {T.import}
                         </button>
                         <button onClick={handleExport} className="flex items-center gap-2 text-sm bg-primary-600 text-white font-semibold py-2 px-3 rounded-lg hover:bg-primary-700 transition-colors">
                             <DownloadIcon className="w-4 h-4" />
-                            Eksport
+                            {T.export}
                         </button>
                     </div>
                 </div>
@@ -373,33 +403,15 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
                             <thead className="text-xs text-neutral-700 uppercase bg-neutral-100 dark:bg-neutral-800/50 dark:text-neutral-400">
                                 <tr>
                                     <th scope="col" className="px-4 py-3">#</th>
-                                    <th scope="col" className="px-6 py-3">
-                                        E-mel
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Nombor Telefon
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Log Masuk Terakhir
-                                    </th>
-                                     <th scope="col" className="px-6 py-3">
-                                        Versi Aplikasi
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Pelayan Proksi
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Token Pengesahan Peribadi
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Status Akaun
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Tindakan
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Semak API
-                                    </th>
+                                    <th scope="col" className="px-6 py-3">{T.table.email}</th>
+                                    <th scope="col" className="px-6 py-3">{T.table.phone}</th>
+                                    <th scope="col" className="px-6 py-3">{T.table.lastLogin}</th>
+                                     <th scope="col" className="px-6 py-3">{T.table.appVersion}</th>
+                                    <th scope="col" className="px-6 py-3">{T.table.proxy}</th>
+                                    <th scope="col" className="px-6 py-3">{T.table.token}</th>
+                                    <th scope="col" className="px-6 py-3">{T.table.status}</th>
+                                    <th scope="col" className="px-6 py-3">{T.table.actions}</th>
+                                    <th scope="col" className="px-6 py-3">{T.table.checkApi}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -407,13 +419,12 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
                                     filteredUsers.map((user, index) => {
                                         const { text, color } = formatStatus(user);
                                         
-                                        // FIX: Explicitly type activeInfo to allow color to be 'green', 'gray', or 'red'.
-                                        let activeInfo: { text: string; color: 'green' | 'gray' | 'red'; fullDate: string; } = { text: 'Tidak Pernah', color: 'red', fullDate: 'N/A' };
+                                        let activeInfo: { text: string; color: 'green' | 'gray' | 'red'; fullDate: string; } = { text: T.table.never, color: 'red', fullDate: 'N/A' };
                                         if (user.lastSeenAt) {
                                             const lastSeenDate = new Date(user.lastSeenAt);
                                             const diffMinutes = (new Date().getTime() - lastSeenDate.getTime()) / (1000 * 60);
                                             if (diffMinutes < 60) {
-                                                activeInfo = { text: 'Aktif sekarang', color: 'green', fullDate: lastSeenDate.toLocaleString() };
+                                                activeInfo = { text: T.table.activeNow, color: 'green', fullDate: lastSeenDate.toLocaleString() };
                                             } else {
                                                 activeInfo = { text: getTimeAgo(lastSeenDate), color: 'gray', fullDate: lastSeenDate.toLocaleString() };
                                             }
@@ -431,18 +442,14 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
                                                     <div>{user.username || '-'}</div>
                                                     <div className="text-xs text-neutral-500">{user.email || '-'}</div>
                                                 </th>
-                                                <td className="px-6 py-4">
-                                                    {user.phone || '-'}
-                                                </td>
+                                                <td className="px-6 py-4">{user.phone || '-'}</td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-2" title={`Terakhir dilihat: ${activeInfo.fullDate}`}>
                                                         <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${activeStatusColors[activeInfo.color]}`}></span>
                                                         <span>{activeInfo.text}</span>
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4">
-                                                    {user.appVersion || '-'}
-                                                </td>
+                                                <td className="px-6 py-4">{user.appVersion || '-'}</td>
                                                 <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-300">
                                                     {user.proxyServer ? user.proxyServer.replace('https://', '').replace('.monoklix.com', '') : '-'}
                                                 </td>
@@ -463,21 +470,10 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <button 
-                                                        onClick={() => openEditModal(user)}
-                                                        className="font-medium text-primary-600 dark:text-primary-500 hover:underline"
-                                                    >
-                                                        Kemas kini
-                                                    </button>
+                                                    <button onClick={() => openEditModal(user)} className="font-medium text-primary-600 dark:text-primary-500 hover:underline">{T.table.update}</button>
                                                 </td>
                                                 <td className="px-6 py-4 text-center">
-                                                     <button
-                                                        onClick={() => { setUserForHealthCheck(user); setIsHealthModalOpen(true); }}
-                                                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                                        title={'Periksa kesihatan API'}
-                                                    >
-                                                        Periksa
-                                                    </button>
+                                                     <button onClick={() => { setUserForHealthCheck(user); setIsHealthModalOpen(true); }} className="font-medium text-blue-600 dark:text-blue-500 hover:underline" title={'Periksa kesihatan API'}>{T.table.check}</button>
                                                 </td>
                                             </tr>
                                         );
@@ -493,8 +489,8 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
                                             ) : (
                                                 <div>
                                                     <UsersIcon className="w-12 h-12 mx-auto text-neutral-400" />
-                                                    <p className="mt-2 font-semibold">Belum ada pengguna berdaftar.</p>
-                                                    <p className="text-xs">Apabila pengguna baru mendaftar, mereka akan muncul di sini.</p>
+                                                    <p className="mt-2 font-semibold">{T.noUsers}</p>
+                                                    <p className="text-xs">{T.noUsersHelp}</p>
                                                 </div>
                                             )}
                                         </td>
@@ -506,27 +502,18 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
                 </div>
             </div>
             
-            {isModalOpen && selectedUser && (
+            {isEditModalOpen && selectedUser && (
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" aria-modal="true" role="dialog">
                     <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-xl p-6 w-full max-w-md m-4">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-bold">Edit Pengguna</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="p-1 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700">
-                                <XIcon className="w-5 h-5" />
-                            </button>
+                            <h3 className="text-lg font-bold">{T.editModal.title}</h3>
+                            <button onClick={() => setIsEditModalOpen(false)} className="p-1 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700"><XIcon className="w-5 h-5" /></button>
                         </div>
-                        <p className="mb-4 text-sm">Mengemas kini profil untuk <span className="font-semibold">{selectedUser.username}</span>.</p>
+                        <p className="mb-4 text-sm">{T.editModal.subtitle} <span className="font-semibold">{selectedUser.username}</span>.</p>
                         <div className="space-y-4">
                             <div>
-                                <label htmlFor="status-select" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                                    Status Akaun
-                                </label>
-                                <select
-                                    id="status-select"
-                                    value={newStatus}
-                                    onChange={(e) => setNewStatus(e.target.value as UserStatus)}
-                                    className="w-full bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                >
+                                <label htmlFor="status-select" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{T.editModal.statusLabel}</label>
+                                <select id="status-select" value={newStatus} onChange={(e) => setNewStatus(e.target.value as UserStatus)} className="w-full bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:outline-none">
                                     <option value="trial">Percubaan</option>
                                     <option value="subscription">Langganan</option>
                                     <option value="lifetime">Seumur Hidup</option>
@@ -534,79 +521,93 @@ const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ language }) => 
                                 </select>
                             </div>
                              <div>
-                                <label htmlFor="token-input" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                                    Token Pengesahan Peribadi
-                                </label>
-                                <input
-                                    id="token-input"
-                                    type="text"
-                                    value={personalToken}
-                                    onChange={(e) => setPersonalToken(e.target.value)}
-                                    placeholder="Token __SESSION pengguna"
-                                    className="w-full bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:outline-none font-mono text-xs"
-                                />
+                                <label htmlFor="token-input" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{T.editModal.tokenLabel}</label>
+                                <input id="token-input" type="text" value={personalToken} onChange={(e) => setPersonalToken(e.target.value)} placeholder={T.editModal.tokenPlaceholder} className="w-full bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:outline-none font-mono text-xs"/>
                             </div>
                             {newStatus === 'subscription' && (
                                 <div className="mt-4 p-3 bg-neutral-100 dark:bg-neutral-700/50 rounded-md">
-                                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                                        Tempoh Langganan
-                                    </label>
+                                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">{T.editModal.durationLabel}</label>
                                     <div className="flex gap-4">
-                                        <label className="flex items-center">
-                                            <input type="radio" name="duration" value={6} checked={subscriptionDuration === 6} onChange={() => setSubscriptionDuration(6)} className="form-radio" />
-                                            <span className="ml-2">6 Bulan</span>
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="radio" name="duration" value={12} checked={subscriptionDuration === 12} onChange={() => setSubscriptionDuration(12)} className="form-radio" />
-                                            <span className="ml-2">12 Bulan</span>
-                                        </label>
+                                        <label className="flex items-center"><input type="radio" name="duration" value={6} checked={subscriptionDuration === 6} onChange={() => setSubscriptionDuration(6)} className="form-radio" /><span className="ml-2">{T.editModal.duration6}</span></label>
+                                        <label className="flex items-center"><input type="radio" name="duration" value={12} checked={subscriptionDuration === 12} onChange={() => setSubscriptionDuration(12)} className="form-radio" /><span className="ml-2">{T.editModal.duration12}</span></label>
                                     </div>
                                 </div>
                             )}
                         </div>
                         <div className="mt-6 flex justify-between items-center">
-                            <button
-                                onClick={handleForceLogout}
-                                className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
-                            >
-                                <XIcon className="w-4 h-4" />
-                                Paksa Log Keluar
-                            </button>
+                            <button onClick={handleForceLogout} className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"><XIcon className="w-4 h-4" />{T.editModal.logoutButton}</button>
                             <div className="flex gap-2">
-                                <button
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="px-4 py-2 text-sm font-semibold bg-neutral-200 dark:bg-neutral-600 rounded-lg hover:bg-neutral-300 dark:hover:bg-neutral-500 transition-colors"
-                                >
-                                    Batal
-                                </button>
-                                <button
-                                    onClick={handleSaveChanges}
-                                    className="px-4 py-2 text-sm font-semibold text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
-                                >
-                                    Simpan Perubahan
-                                </button>
+                                <button onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 text-sm font-semibold bg-neutral-200 dark:bg-neutral-600 rounded-lg hover:bg-neutral-300 dark:hover:bg-neutral-500 transition-colors">{T.editModal.cancel}</button>
+                                <button onClick={handleSaveChanges} className="px-4 py-2 text-sm font-semibold text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors">{T.editModal.save}</button>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
             
+            {isAddUserModalOpen && (
+                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" aria-modal="true" role="dialog">
+                    <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-xl p-6 w-full max-w-md m-4">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-bold">{T.addModal.title}</h3>
+                            <button onClick={() => setIsAddUserModalOpen(false)} className="p-1 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700"><XIcon className="w-5 h-5" /></button>
+                        </div>
+                        <p className="mb-4 text-sm">{T.addModal.subtitle}</p>
+                        {modalError && <p className="text-red-500 text-sm text-center p-2 bg-red-100 rounded-md mb-4">{modalError}</p>}
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{T.addModal.fullName}</label>
+                                <input type="text" value={newUser.fullName} onChange={(e) => setNewUser(p => ({ ...p, fullName: e.target.value }))} className="w-full bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2"/>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{T.addModal.email}</label>
+                                <input type="email" value={newUser.email} onChange={(e) => setNewUser(p => ({ ...p, email: e.target.value }))} className="w-full bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2"/>
+                            </div>
+                             <div>
+                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{T.addModal.phone}</label>
+                                <input type="tel" value={newUser.phone} onChange={(e) => setNewUser(p => ({ ...p, phone: e.target.value }))} className="w-full bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2"/>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{T.addModal.role}</label>
+                                    <select value={newUser.role} onChange={(e) => setNewUser(p => ({ ...p, role: e.target.value as UserRole }))} className="w-full bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2">
+                                        <option value="user">User</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{T.addModal.status}</label>
+                                    <select value={newUser.status} onChange={(e) => setNewUser(p => ({ ...p, status: e.target.value as UserStatus }))} className="w-full bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2">
+                                        <option value="lifetime">Seumur Hidup</option>
+                                        <option value="subscription">Langganan</option>
+                                        <option value="trial">Percubaan</option>
+                                        <option value="inactive">Tidak Aktif</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-6 flex justify-end gap-2">
+                            <button onClick={() => setIsAddUserModalOpen(false)} className="px-4 py-2 text-sm font-semibold bg-neutral-200 dark:bg-neutral-600 rounded-lg hover:bg-neutral-300 dark:hover:bg-neutral-500">{T.addModal.cancel}</button>
+                            <button onClick={handleCreateUser} className="px-4 py-2 text-sm font-semibold text-white bg-primary-600 rounded-lg hover:bg-primary-700">{T.addModal.createUser}</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
             {isConfirmLogoutOpen && selectedUser && (
-                // FIX: Add missing 'language' prop to ConfirmationModal component.
                 <ConfirmationModal
                     isOpen={isConfirmLogoutOpen}
-                    title="Sahkan Log Keluar Paksa"
-                    message={`Adakah anda pasti mahu menamatkan sesi semasa ${selectedUser.username}? Mereka akan dilog keluar serta-merta, tetapi akaun mereka akan kekal aktif.`}
+                    title={T.confirmLogout.title}
+                    message={T.confirmLogout.message.replace('{username}', selectedUser.username)}
                     onConfirm={executeForceLogout}
                     onCancel={() => setIsConfirmLogoutOpen(false)}
-                    confirmText="Log Keluar Paksa"
+                    confirmText={T.confirmLogout.confirm}
                     confirmButtonClass="bg-red-600 hover:bg-red-700"
                     language={language}
                 />
             )}
 
             {isHealthModalOpen && (
-                // FIX: Add missing 'language' prop to ApiHealthCheckModal component.
                 <ApiHealthCheckModal
                     isOpen={isHealthModalOpen}
                     onClose={() => {

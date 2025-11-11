@@ -3,6 +3,7 @@ import { supabase, type Database } from './supabaseClient';
 import { loadData } from './indexedDBService';
 import { MODELS } from './aiConfig';
 import { APP_VERSION } from './appConfig';
+import { v4 as uuidv4 } from 'uuid';
 
 type UserProfileData = Database['public']['Tables']['users']['Row'];
 
@@ -170,7 +171,6 @@ export const updateUserProfile = async (
 
     const { data: updatedData, error } = await supabase
         .from('users')
-        // FIX: This operation is now correctly typed after fixing supabaseClient.ts types.
         .update(profileUpdates)
         .eq('id', userId)
         .select()
@@ -212,11 +212,9 @@ export const replaceUsers = async (importedUsers: User[]): Promise<{ success: bo
             total_video: user.totalVideo || 0,
         }));
         
-        // FIX: Replaced `.neq()` with `.not('role', 'eq', ...)` for better type compatibility with Supabase client.
         const { error: deleteError } = await supabase.from('users').delete().not('role', 'eq', 'admin');
         if (deleteError) throw deleteError;
 
-        // FIX: This operation is now correctly typed after fixing supabaseClient.ts types.
         const { error: insertError } = await supabase.from('users').insert(profilesToInsert);
         if (insertError) throw insertError;
 
@@ -256,7 +254,6 @@ export const initializeAdminAccount = async () => {
         return;
     }
     
-    // FIX: The type of `adminUser` is now correctly inferred, so `adminUser.id` is accessible.
     const adminUserId = adminUser.id;
 
     const profileData: Database['public']['Tables']['users']['Insert'] = {
@@ -268,7 +265,6 @@ export const initializeAdminAccount = async () => {
         status: 'admin',
     };
     
-    // FIX: This operation is now correctly typed after fixing supabaseClient.ts types.
     const { error: upsertError } = await supabase.from('users').upsert(profileData, { onConflict: 'id' });
 
     if (upsertError) {
@@ -283,7 +279,6 @@ export const updateUserWebhookUrl = async (
 ): Promise<{ success: true; user: User } | { success: false; message: string }> => {
     const { data: updatedData, error } = await supabase
         .from('users')
-        // FIX: This operation is now correctly typed after fixing supabaseClient.ts types.
         .update({ webhook_url: webhookUrl })
         .eq('id', userId)
         .select()
@@ -511,20 +506,12 @@ export const getSharedMasterApiKey = async (): Promise<string | null> => {
     return data?.api_key || null;
 };
 
-// FIX: Add missing functions and types for ApiGeneratorView.
-/**
- * Type definition for an API key available for claiming.
- */
 export interface AvailableApiKey {
   id: number;
   apiKey: string;
   createdAt: string;
 }
 
-/**
- * Fetches all unclaimed API keys from the database.
- * @returns {Promise<AvailableApiKey[]>} A promise that resolves to an array of available keys.
- */
 export const getAvailableApiKeys = async (): Promise<AvailableApiKey[]> => {
     const { data, error } = await supabase
         .from('generated_api_keys')
@@ -537,7 +524,6 @@ export const getAvailableApiKeys = async (): Promise<AvailableApiKey[]> => {
         throw error;
     }
 
-    // FIX: Corrected property access from snake_case (api_key, created_at) to camelCase (apiKey, createdAt) to match the AvailableApiKey interface.
     return data.map(key => ({
         id: key.id,
         apiKey: key.api_key,
@@ -545,13 +531,6 @@ export const getAvailableApiKeys = async (): Promise<AvailableApiKey[]> => {
     }));
 };
 
-/**
- * Claims an available API key for a specific user.
- * @param {number} keyId - The ID of the key to claim.
- * @param {string} userId - The ID of the user claiming the key.
- * @param {string} username - The username of the user claiming the key.
- * @returns {Promise<{ success: boolean; message?: string }>} A promise indicating success or failure.
- */
 export const claimApiKey = async (keyId: number, userId: string, username: string): Promise<{ success: boolean; message?: string }> => {
     const { error } = await supabase
         .from('generated_api_keys')
@@ -571,12 +550,6 @@ export const claimApiKey = async (keyId: number, userId: string, username: strin
     return { success: true };
 };
 
-/**
- * Saves a new API key to a user's profile.
- * @param {string} userId - The ID of the user.
- * @param {string} apiKey - The new API key to save.
- * @returns {Promise<{ success: true; user: User } | { success: false; message: string }>} The result of the update.
- */
 export const saveUserApiKey = async (userId: string, apiKey: string): Promise<{ success: true; user: User } | { success: false; message: string }> => {
     const { data: updatedData, error } = await supabase
         .from('users')
@@ -639,11 +612,6 @@ export const incrementVideoUsage = async (user: User): Promise<{ success: true; 
     }
 };
 
-/**
- * Updates the last seen timestamp for a given user. This is a fire-and-forget
- * operation used for tracking user activity.
- * @param {string} userId - The ID of the user to update.
- */
 export const updateUserLastSeen = async (userId: string): Promise<void> => {
     try {
         const { error } = await supabase
@@ -655,7 +623,6 @@ export const updateUserLastSeen = async (userId: string): Promise<void> => {
             .eq('id', userId);
         
         if (error) {
-            // This is a background task, so we just log the error without throwing
             console.warn('Failed to update last_seen_at:', getErrorMessage(error));
         }
     } catch (error) {
@@ -699,14 +666,40 @@ export const updateUserProxyServer = async (userId: string, serverUrl: string | 
     return true;
 };
 
-/**
- * Marks a token as expired in the database.
- * NOTE: This functionality is currently DISABLED as per user request.
- * The function will do nothing when called.
- * @param token The token string to mark as expired.
- */
 export const updateTokenStatusToExpired = async (token: string): Promise<void> => {
-    // This functionality is disabled per user request. The function body is empty.
     console.log(`[DISABLED] Skipping marking token ...${token.slice(-6)} as expired.`);
     return Promise.resolve();
+};
+
+export const createNewUser = async (
+  userData: { fullName: string; email: string; phone: string; role: UserRole; status: UserStatus }
+): Promise<{ success: boolean; messageKey?: string }> => {
+    const { fullName, email, phone, role, status } = userData;
+    const cleanedEmail = email.trim().toLowerCase();
+
+    if (!fullName || !cleanedEmail || !phone) {
+        return { success: false, messageKey: 'userCreateMissingFields' };
+    }
+
+    const newUserId = uuidv4();
+
+    const { error } = await supabase.from('users').insert({
+        id: newUserId,
+        full_name: fullName,
+        email: cleanedEmail,
+        phone,
+        role,
+        status,
+        created_at: new Date().toISOString(),
+    });
+
+    if (error) {
+        console.error('Error creating new user:', getErrorMessage(error));
+        if (error.message.includes('duplicate key value violates unique constraint "users_email_key"')) {
+            return { success: false, messageKey: 'userCreateDuplicate' };
+        }
+        return { success: false, messageKey: getErrorMessage(error) };
+    }
+
+    return { success: true };
 };
