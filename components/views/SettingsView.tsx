@@ -427,7 +427,7 @@ const ApiIntegrationsPanel: React.FC<ApiIntegrationsPanelProps> = ({ currentUser
         setIsCheckingHealth(true);
         setHealthCheckResults(null);
         try {
-            const activeApiKey = sessionStorage.getItem('monoklix_session_api_key');
+            const activeApiKey = sessionStorage.getItem('esaie_tech_session_api_key');
             const results = await runApiHealthCheck({
                 textKey: activeApiKey || undefined,
             });
@@ -449,7 +449,7 @@ const ApiIntegrationsPanel: React.FC<ApiIntegrationsPanelProps> = ({ currentUser
     };
     
     const locale = language === 'ms' ? 'ms-MY' : 'en-US';
-    const activeApiKey = sessionStorage.getItem('monoklix_session_api_key');
+    const activeApiKey = sessionStorage.getItem('esaie_tech_session_api_key');
 
     const handleSavePersonalToken = async () => {
         setPersonalTokenSaveStatus('saving');
