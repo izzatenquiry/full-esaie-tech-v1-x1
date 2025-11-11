@@ -15,7 +15,7 @@ import { type Language } from '../../types';
 const vibeOptions = ["Rawak", "Bertenaga & Seronok", "Sinematik & Epik", "Moden & Bersih", "Semula Jadi & Organik", "Teknologi & Futuristik"];
 const lightingOptions = ["Rawak","Lampu Studio", "Dramatik", "Cahaya Semula Jadi", "Neon", "Waktu Keemasan", "Cahaya Siang Lembut"];
 const contentTypeOptions = ["Rawak", "Jualan Keras", "Jualan Lembut", "Bercerita", "Masalah/Penyelesaian", "ASMR / Sensori", "Buka Kotak", "Pendidikan", "Testimoni"];
-const languages = ["English", "Bahasa Malaysia"];
+const languages = ["Bahasa Melayu", "English"];
 
 const downloadText = (text: string, fileName: string) => {
     const blob = new Blob([text], { type: 'text/plain' });
@@ -61,7 +61,7 @@ const ProductAdView: React.FC<ProductAdViewProps> = ({ language }) => {
     vibe: vibeOptions[0],
     lighting: lightingOptions[0],
     contentType: contentTypeOptions[0],
-    language: "Bahasa Malaysia",
+    language: "Bahasa Melayu",
   });
   const [storyboard, setStoryboard] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -150,7 +150,7 @@ const ProductAdView: React.FC<ProductAdViewProps> = ({ language }) => {
         vibe: vibeOptions[0],
         lighting: lightingOptions[0],
         contentType: contentTypeOptions[0],
-        language: "Bahasa Malaysia",
+        language: "Bahasa Melayu",
     });
     setStoryboard(null);
     setError(null);

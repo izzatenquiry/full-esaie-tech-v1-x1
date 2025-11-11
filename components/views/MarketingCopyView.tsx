@@ -11,7 +11,7 @@ import { type Language } from '../../types';
 
 
 const tones = ["Profesional", "Santai", "Jenaka", "Memujuk", "Empati", "Berani"];
-const languages = ["English", "Bahasa Malaysia"];
+const languages = ["Bahasa Melayu", "English"];
 
 const downloadText = (text: string, fileName: string) => {
     const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
@@ -37,7 +37,7 @@ const MarketingCopyView: React.FC<MarketingCopyViewProps> = ({ language }) => {
     const [targetAudience, setTargetAudience] = useState('');
     const [keywords, setKeywords] = useState('');
     const [selectedTone, setSelectedTone] = useState(tones[0]);
-    const [selectedLanguage, setSelectedLanguage] = useState("Bahasa Malaysia");
+    const [selectedLanguage, setSelectedLanguage] = useState("Bahasa Melayu");
     const [generatedCopy, setGeneratedCopy] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -111,7 +111,7 @@ const MarketingCopyView: React.FC<MarketingCopyViewProps> = ({ language }) => {
         setTargetAudience('');
         setKeywords('');
         setSelectedTone(tones[0]);
-        setSelectedLanguage("Bahasa Malaysia");
+        setSelectedLanguage("Bahasa Melayu");
         setGeneratedCopy('');
         setError(null);
         sessionStorage.removeItem(SESSION_KEY);

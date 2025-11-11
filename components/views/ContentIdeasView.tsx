@@ -24,7 +24,7 @@ const downloadText = (text: string, fileName: string) => {
     URL.revokeObjectURL(url);
 };
 
-const languages = ["English", "Bahasa Malaysia"];
+const languages = ["Bahasa Melayu", "English"];
 const SESSION_KEY = 'contentIdeasState';
 
 interface ContentIdeasViewProps {
@@ -38,7 +38,7 @@ const ContentIdeasView: React.FC<ContentIdeasViewProps> = ({ language }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState("Bahasa Malaysia");
+    const [selectedLanguage, setSelectedLanguage] = useState("Bahasa Melayu");
     
     useEffect(() => {
         try {
@@ -99,7 +99,7 @@ const ContentIdeasView: React.FC<ContentIdeasViewProps> = ({ language }) => {
         setTopic('');
         setResponse(null);
         setError(null);
-        setSelectedLanguage("Bahasa Malaysia");
+        setSelectedLanguage("Bahasa Melayu");
         sessionStorage.removeItem(SESSION_KEY);
     }, []);
 

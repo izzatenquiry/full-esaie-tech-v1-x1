@@ -62,7 +62,8 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
     </div>
 );
 
-const VoiceStudioView: React.FC<VoiceStudioViewProps> = ({ language }) => {
+// FIX: Changed to named export and added missing return statement to resolve compilation errors.
+export const VoiceStudioView: React.FC<VoiceStudioViewProps> = ({ language }) => {
     const [script, setScript] = useState('');
     const [actor, setActor] = useState(voiceActors[0].id);
     const [mood, setMood] = useState('Normal');
@@ -172,46 +173,34 @@ const VoiceStudioView: React.FC<VoiceStudioViewProps> = ({ language }) => {
                     onChange={(e) => setScript(e.target.value)}
                     placeholder="Masukkan teks anda di sini..."
                     rows={8}
-                    className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3 focus:ring-2 focus:ring-primary-500 focus:outline-none transition"
+                    className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3"
                 />
-                <p className="text-right text-xs text-gray-500">{script.length} aksara</p>
-            </Section>
-            
-            <Section title="Pilih Pelakon Suara">
-                <select value={actor} onChange={e => setActor(e.target.value)} className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3 focus:ring-2 focus:ring-primary-500 focus:outline-none">
-                    {voiceActors.map(va => (
-                        <option key={va.id} value={va.id}>
-                            {va.name} - {va.gender} ({va.language})
-                        </option>
-                    ))}
-                </select>
+                 <p className="text-right text-xs text-neutral-500">{script.length} aksara</p>
             </Section>
 
+            <Section title="Pilih Pelakon Suara">
+                 <select value={actor} onChange={(e) => setActor(e.target.value)} className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3">
+                    {voiceActors.map(va => <option key={va.id} value={va.id}>{va.name} ({va.language} {va.gender})</option>)}
+                </select>
+            </Section>
+            
             <Section title="Jenis Penjanaan">
-                <div className="flex justify-center gap-4">
-                     <button onClick={() => setGenerationMode('speak')} className={`px-6 py-2 rounded-full font-semibold transition-colors text-sm w-full ${generationMode === 'speak' ? 'bg-primary-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'}`}>Cakap</button>
-                    <button onClick={() => setGenerationMode('sing')} className={`px-6 py-2 rounded-full font-semibold transition-colors text-sm w-full ${generationMode === 'sing' ? 'bg-primary-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'}`}>Nyanyi</button>
+                <div className="flex gap-4">
+                     <button onClick={() => setGenerationMode('speak')} className={`px-6 py-2 rounded-full font-semibold transition-colors text-sm ${generationMode === 'speak' ? 'bg-primary-600 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}>Cakap</button>
+                     <button onClick={() => setGenerationMode('sing')} className={`px-6 py-2 rounded-full font-semibold transition-colors text-sm ${generationMode === 'sing' ? 'bg-primary-600 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}>Nyanyi</button>
                 </div>
             </Section>
 
             {generationMode === 'speak' ? (
                 <Section title="Pilih Mood Suara">
-                    <select value={mood} onChange={e => setMood(e.target.value)} className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3 focus:ring-2 focus:ring-primary-500 focus:outline-none">
-                        {moodOptions.map(m => (
-                            <option key={m} value={m}>
-                                {m}
-                            </option>
-                        ))}
+                    <select value={mood} onChange={(e) => setMood(e.target.value)} className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3">
+                        {moodOptions.map(m => <option key={m} value={m}>{m}</option>)}
                     </select>
                 </Section>
             ) : (
-                 <Section title="Pilih Gaya Muzik">
-                    <select value={musicStyle} onChange={e => setMusicStyle(e.target.value)} className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3 focus:ring-2 focus:ring-primary-500 focus:outline-none">
-                        {musicStyleOptions.map(style => (
-                            <option key={style} value={style}>
-                                {style}
-                            </option>
-                        ))}
+                <Section title="Pilih Gaya Muzik">
+                    <select value={musicStyle} onChange={(e) => setMusicStyle(e.target.value)} className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3">
+                        {musicStyleOptions.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
                 </Section>
             )}
@@ -219,45 +208,51 @@ const VoiceStudioView: React.FC<VoiceStudioViewProps> = ({ language }) => {
             <div className="pt-4 mt-auto">
                 <div className="flex gap-4">
                     <button onClick={handleGenerate} disabled={isLoading} className="w-full flex items-center justify-center gap-2 bg-primary-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50">
-                        {isLoading ? <Spinner /> : 'Jana Audio'}
+                        {isLoading ? <Spinner /> : "Jana Audio"}
                     </button>
                     <button onClick={handleReset} disabled={isLoading} className="flex-shrink-0 bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 font-semibold py-3 px-4 rounded-lg hover:bg-neutral-300 dark:hover:bg-neutral-600 transition-colors disabled:opacity-50">
                         Set Semula
                     </button>
                 </div>
+                {error && <p className="text-red-500 dark:text-red-400 mt-2 text-center">{error}</p>}
             </div>
         </>
     );
 
     const rightPanel = (
         <>
-            {isLoading && <div className="flex flex-col items-center justify-center h-full"><Spinner /><p className="mt-2 text-sm text-neutral-500">Menjana audio, sila tunggu...</p></div>}
-            {error && (
-                <div className="text-center text-red-500 p-4">
-                    <AlertTriangleIcon className="w-12 h-12 mx-auto mb-4"/>
-                    <p className="font-semibold">Penjanaan Gagal</p>
-                    <p className="text-sm mt-2 max-w-md mx-auto">{error}</p>
-                </div>
-            )}
-            {audioUrl && audioBlob && (
-                <div className="flex flex-col items-center justify-center h-full gap-6">
-                    <audio controls src={audioUrl} className="w-full max-w-sm">Penyemak imbas anda tidak menyokong elemen audio.</audio>
-                    <a href={audioUrl} download={`monoklix-voiceover-${Date.now()}.wav`} className="flex items-center gap-2 bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors">
-                        <DownloadIcon className="w-4 h-4"/> Muat Turun Audio
-                    </a>
-                </div>
-            )}
-            {!isLoading && !error && !audioUrl && (
-                <div className="text-center text-neutral-500 dark:text-neutral-600">
-                    <MicIcon className="w-16 h-16 mx-auto" />
-                    <p>Audio yang anda jana akan muncul di sini.</p>
-                </div>
-            )}
-        </>
-    );
-    
-    // FIX: Pass the 'language' prop to the TwoColumnLayout component.
+           {isLoading ? (
+               <div className="flex flex-col items-center justify-center h-full gap-4">
+                   <Spinner />
+                   <p className="text-neutral-500 dark:text-neutral-400">Menjana audio, sila tunggu...</p>
+               </div>
+           ) : error ? (
+                <div className="text-center p-4 text-red-500 dark:text-red-400">
+                    <AlertTriangleIcon className="w-12 h-12 mx-auto mb-2"/>
+                   <p className="font-semibold">Oh tidak!</p>
+                   <p className="text-sm">{error}</p>
+               </div>
+           ) : audioUrl ? (
+               <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-4">
+                   <audio src={audioUrl} controls autoPlay className="w-full max-w-md rounded-lg"/>
+                   {audioBlob && (
+                        <a 
+                           href={audioUrl} 
+                           download={`monoklix-voiceover-${Date.now()}.wav`}
+                           className="flex items-center gap-2 bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors mt-4"
+                       >
+                           <DownloadIcon className="w-4 h-4"/> Muat Turun Audio
+                       </a>
+                   )}
+               </div>
+           ) : (
+               <div className="text-center text-neutral-500 dark:text-neutral-600">
+                   <MicIcon className="w-16 h-16 mx-auto" />
+                   <p>Audio yang anda jana akan muncul di sini.</p>
+               </div>
+           )}
+       </>
+   );
+
     return <TwoColumnLayout leftPanel={leftPanel} rightPanel={rightPanel} language={language} />;
 };
-
-export default VoiceStudioView;

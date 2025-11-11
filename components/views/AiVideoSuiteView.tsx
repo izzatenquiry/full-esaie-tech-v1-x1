@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import VideoGenerationView from './VideoGenerationView';
 import { VideoCombinerView } from './VideoCombinerView';
-import VoiceStudioView from './VoiceStudioView';
+// FIX: Changed to a named import to resolve the "no default export" error.
+import { VoiceStudioView } from './VoiceStudioView';
 import { ProductReviewView } from './ProductReviewView';
 import Tabs, { type Tab } from '../common/Tabs';
 // FIX: Import Language type.
